@@ -1,26 +1,9 @@
 from pydantic import BaseModel, Field, ConfigDict
-from typing import Optional, Any
+from typing import Optional
 from datetime import datetime
-from bson import ObjectId
-
-class PyObjectId(ObjectId):
-    @classmethod
-    def __get_validators__(cls):
-        yield cls.validate
-
-    @classmethod
-    def validate(cls, v):
-        if not ObjectId.is_valid(v):
-            raise ValueError("Invalid objectid")
-        return ObjectId(v)
-
-    @classmethod
-    def __get_pydantic_json_schema__(cls, field_schema: dict[str, Any]) -> None:
-        field_schema.update(type="string")
 
 class CompanyModel(BaseModel):
-    id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
-    linkedin_id: str
+    linkedin_id: str = Field(..., alias="_id")
     name: str
     industry: str
     founded: int
@@ -29,11 +12,11 @@ class CompanyModel(BaseModel):
     model_config = ConfigDict(
         populate_by_name=True,
         arbitrary_types_allowed=True,
-        json_encoders={ObjectId: str}
+        json_encoders={str: str}
     )
 
 class ProjectModel(BaseModel):
-    id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
+    id: str = Field(..., alias="_id")
     company_linkedin_id: str
     name: str
     description: str
@@ -44,11 +27,11 @@ class ProjectModel(BaseModel):
     model_config = ConfigDict(
         populate_by_name=True,
         arbitrary_types_allowed=True,
-        json_encoders={ObjectId: str}
+        json_encoders={str: str}
     )
 
 class TeamModel(BaseModel):
-    id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
+    id: str = Field(..., alias="_id")
     company_linkedin_id: str
     name: str
     department: str
@@ -57,12 +40,11 @@ class TeamModel(BaseModel):
     model_config = ConfigDict(
         populate_by_name=True,
         arbitrary_types_allowed=True,
-        json_encoders={ObjectId: str}
+        json_encoders={str: str}
     )
 
 class ContactModel(BaseModel):
-    id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
-    linkedin_id: str
+    linkedin_id: str = Field(..., alias="_id")
     company_linkedin_id: str
     name: str
     position: str
@@ -72,11 +54,11 @@ class ContactModel(BaseModel):
     model_config = ConfigDict(
         populate_by_name=True,
         arbitrary_types_allowed=True,
-        json_encoders={ObjectId: str}
+        json_encoders={str: str}
     )
 
 class NewsModel(BaseModel):
-    id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
+    id: str = Field(..., alias="_id")
     company_linkedin_id: str
     title: str
     content: str
@@ -86,5 +68,5 @@ class NewsModel(BaseModel):
     model_config = ConfigDict(
         populate_by_name=True,
         arbitrary_types_allowed=True,
-        json_encoders={ObjectId: str}
+        json_encoders={str: str}
     )
