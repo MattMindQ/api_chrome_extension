@@ -1,6 +1,5 @@
-# File: models.py
-from pydantic import BaseModel, Field
-from typing import Optional
+from pydantic import BaseModel, Field, ConfigDict
+from typing import Optional, Any
 from datetime import datetime
 from bson import ObjectId
 
@@ -16,7 +15,7 @@ class PyObjectId(ObjectId):
         return ObjectId(v)
 
     @classmethod
-    def __modify_schema__(cls, field_schema):
+    def __get_pydantic_json_schema__(cls, field_schema: dict[str, Any]) -> None:
         field_schema.update(type="string")
 
 class CompanyModel(BaseModel):
@@ -27,10 +26,11 @@ class CompanyModel(BaseModel):
     founded: int
     employees: int
 
-    class Config:
-        allow_population_by_field_name = True
-        arbitrary_types_allowed = True
-        json_encoders = {ObjectId: str}
+    model_config = ConfigDict(
+        populate_by_name=True,
+        arbitrary_types_allowed=True,
+        json_encoders={ObjectId: str}
+    )
 
 class ProjectModel(BaseModel):
     id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
@@ -41,10 +41,11 @@ class ProjectModel(BaseModel):
     end_date: Optional[datetime] = None
     status: str
 
-    class Config:
-        allow_population_by_field_name = True
-        arbitrary_types_allowed = True
-        json_encoders = {ObjectId: str}
+    model_config = ConfigDict(
+        populate_by_name=True,
+        arbitrary_types_allowed=True,
+        json_encoders={ObjectId: str}
+    )
 
 class TeamModel(BaseModel):
     id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
@@ -53,10 +54,11 @@ class TeamModel(BaseModel):
     department: str
     size: int
 
-    class Config:
-        allow_population_by_field_name = True
-        arbitrary_types_allowed = True
-        json_encoders = {ObjectId: str}
+    model_config = ConfigDict(
+        populate_by_name=True,
+        arbitrary_types_allowed=True,
+        json_encoders={ObjectId: str}
+    )
 
 class ContactModel(BaseModel):
     id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
@@ -67,10 +69,11 @@ class ContactModel(BaseModel):
     email: str
     phone: Optional[str] = None
 
-    class Config:
-        allow_population_by_field_name = True
-        arbitrary_types_allowed = True
-        json_encoders = {ObjectId: str}
+    model_config = ConfigDict(
+        populate_by_name=True,
+        arbitrary_types_allowed=True,
+        json_encoders={ObjectId: str}
+    )
 
 class NewsModel(BaseModel):
     id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
@@ -80,7 +83,8 @@ class NewsModel(BaseModel):
     publish_date: datetime
     source: str
 
-    class Config:
-        allow_population_by_field_name = True
-        arbitrary_types_allowed = True
-        json_encoders = {ObjectId: str}
+    model_config = ConfigDict(
+        populate_by_name=True,
+        arbitrary_types_allowed=True,
+        json_encoders={ObjectId: str}
+    )
