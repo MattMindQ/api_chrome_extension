@@ -5,6 +5,7 @@ from pymongo.server_api import ServerApi
 import os
 from dotenv import load_dotenv
 from routes import company_router, project_router, team_router, contact_router, news_router
+import uvicorn
 
 load_dotenv()
 
@@ -25,5 +26,5 @@ app.include_router(contact_router, prefix="/api/companies", tags=["contacts"])
 app.include_router(news_router, prefix="/api/companies", tags=["news"])
 
 if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run("main:app", host="0.0.0.0", port=port, reload=False)
