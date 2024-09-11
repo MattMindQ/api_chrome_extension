@@ -8,7 +8,7 @@ import ssl
 load_dotenv()
 
 uri = os.getenv("MONGODB_URI")
-client = AsyncIOMotorClient(uri, server_api=ServerApi('1'), ssl=True, ssl_cert_reqs=ssl.CERT_NONE)
+client = AsyncIOMotorClient(uri, server_api=ServerApi('1'), tls=True, tlsAllowInvalidCertificates=True)
 db = client.company_data
 
 async def create_or_update_company(company_data):
